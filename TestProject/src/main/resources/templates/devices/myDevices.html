@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://thymeleaf.org">
+<head>
+	<meta charset="UTF-8" />
+	<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="description" content="" />
+    <meta name="author" content="" />
+    
+    <!-- Bootstrap Core CSS -->
+    <link href="/css/bootstrap.min.css" rel="stylesheet" />
+    
+    <!-- Custom CSS -->
+    <link href="/css/modern-business.css" rel="stylesheet" />
+
+    <!-- Custom Fonts -->
+    <link href="/font-awesome/css/font-awesome.min.css" rel="stylesheet" type="text/css" />
+    
+<title>My Devices</title>
+</head>
+<body>
+	
+	 <!-- Include Top Menu(Navigation bar) -->
+	<div th:include="topMenu :: topMenu"></div>
+
+	<!-- Page Content -->
+    <div class="container">
+
+        <!-- Page Heading/Breadcrumbs -->
+        <div class="row">
+            <div class="col-lg-12">
+                <h1 class="page-header">My Devices
+                    <small>Management</small>
+                </h1>
+                <ol class="breadcrumb">
+                    <li><a href="/index">Home</a>
+                    </li>
+                    <li class="active">My Devices</li>
+                </ol>
+            </div>
+        </div>
+        <!-- /.row -->
+        
+        <!-- New device button -->
+        <div class="row">
+        	<div class="col-lg-12">
+        		<a class="btn btn-info" href="newMyDevice">New Device</a>
+        	</div>
+        </div>
+        <!-- /.row -->
+        
+        <hr></hr>
+        
+        <div th:each="myDevice : ${myDevices}">
+        <!-- Project One -->
+        <div class="row">
+            <div class="col-md-7">
+                <iframe width="100%" height="350" style="border: 1px solid #cccccc;" th:src="@{'/chart/devices/'+${myDevice.id}}" ></iframe>
+            </div>
+            <div class="col-md-5">
+                <h3 th:text="${myDevice.deviceName}">Project Title</h3>
+                <h5 th:inline="text">Device ID : [[${myDevice.id}]]</h5>
+                <h4 th:text="${myDevice.location}">Location</h4>
+                <p th:text="${myDevice.description}">Description</p>   
+                <h4 th:inline="text"><i class="fa fa-tag fa-3"></i> [[${myDevice.tags}]]</h4>
+                <a class="btn btn-primary" href="#">View Device</a>
+            </div>
+            
+        </div>
+        <!-- /.row -->
+        
+        <hr></hr>
+        </div>
+        
+     </div>
+     <!-- /.container -->
+
+    <!-- jQuery -->
+    <script src="/js/jquery.js"></script>
+
+    <!-- Bootstrap Core JavaScript -->
+    <script src="/js/bootstrap.min.js"></script>
+
+    <!-- high chart -->
+    <script src="http://code.highcharts.com/highcharts.js"></script>
+     
+</body>
+</html>

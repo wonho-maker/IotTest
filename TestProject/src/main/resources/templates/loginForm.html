@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://thymeleaf.org">
+<head>
+	<meta charset="UTF-8" />
+	<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="description" content="" />
+    <meta name="author" content="" />
+    
+    <!-- Bootstrap Core CSS -->
+    <link href="css/bootstrap.min.css" rel="stylesheet" />
+    
+    <!-- Custom CSS -->
+    <link href="css/modern-business.css" rel="stylesheet" />
+
+    <!-- Custom Fonts -->
+    <link href="font-awesome/css/font-awesome.min.css" rel="stylesheet" type="text/css" />
+    
+<title>Login</title>
+</head>
+<body>
+	<div th:if="${param.error}">
+		Invalid user name and password.
+	</div>
+	<div th:if="${param.logout}">
+		You have been logged out.
+	</div>
+	
+	<div th:include="topMenu :: topMenu"></div>
+	
+	<!-- Page Content -->
+    <div class="container">
+
+        <!-- Page Heading/Breadcrumbs -->
+        <div class="row">
+            <div class="col-lg-12">
+                <h1 class="page-header">Login
+                    <small>Login</small>
+                </h1>
+                <ol class="breadcrumb">
+                    <li><a href="/">Home</a>
+                    </li>
+                    <li class="active">Login</li>
+                </ol>
+            </div>
+        </div>
+        <!-- /.row -->
+        
+        
+        <!-- Contact Form -->
+        <!-- In order to set the email address and subject line for the contact form go to the bin/contact_me.php file. -->
+     	<div class="row">
+            <div class="col-md-8">
+                <h3>Login</h3>
+                <form name="loginForm" id="loginForm" th:action="@{/signIn}" method="post" novalidate="novalidate">
+                    <div class="control-group form-group">
+                        <div class="controls">
+                            <label>User ID</label>
+                            <input type="text" class="form-control" id="name" name="username" required="required" data-validation-required-message="Please enter your name." />
+                            <p class="help-block"></p>
+                        </div>
+                    </div>
+                    <div class="control-group form-group">
+                        <div class="controls">
+                            <label>Password</label>
+                            <input type="password" class="form-control" id="password" name="password" required="required" data-validation-required-message="Please enter your phone number." />
+                        </div>
+                    </div>
+                    
+                    
+                    <!-- For success/fail messages -->
+                    <button type="submit" class="btn btn-primary">Sign In</button>
+                </form>
+            </div>
+
+        </div>
+        <!-- /.row -->
+        
+        <hr />
+
+        <!-- Footer -->
+        <footer>
+            <div class="row">
+                <div class="col-lg-12">
+                    <p>Copyright &copy; Your Website 2014</p>
+                </div>
+            </div>
+        </footer>
+        
+     </div>
+	 <!-- /.container -->
+	 
+	 <!-- jQuery -->
+    <script src="js/jquery.js"></script>
+
+    <!-- Bootstrap Core JavaScript -->
+    <script src="js/bootstrap.min.js"></script>
+
+    <!-- Contact Form JavaScript -->
+    <!-- Do not edit these files! In order to set the email address and subject line for the contact form go to the bin/contact_me.php file. -->
+    <script src="js/jqBootstrapValidation.js"></script>
+    <script>
+  		$(function () { $("input,textarea").not("[type=submit]").jqBootstrapValidation(); } );
+	</script>
+    <!-- <script src="js/contact_me.js"></script> -->
+    
+</body>
+</html>
