@@ -38,6 +38,7 @@ public class APIController {
 	@RequestMapping(value = "/devices/{deviceId}", method = RequestMethod.GET)
 	public List<Devices> getDeviceData(@PathVariable Long deviceId,
 									@RequestParam(value="key", required=false) String apiKey)
+									
 	{
 		Devices device = deviceRepository.findOne(deviceId);
 		
@@ -104,13 +105,13 @@ public class APIController {
 		if(device.getDataName1() != null && value1 != null)
 			newData.setDataValue1(value1);
 		if(device.getDataName2() != null && value2 != null)
-			newData.setDataValue2(value1);
+			newData.setDataValue2(value2);
 		if(device.getDataName3() != null && value3 != null)
-			newData.setDataValue3(value1);
+			newData.setDataValue3(value3);
 		if(device.getDataName4() != null && value4 != null)
-			newData.setDataValue4(value1);
+			newData.setDataValue4(value4);
 		if(device.getDataName5() != null && value5 != null)
-			newData.setDataValue5(value1);
+			newData.setDataValue5(value5);
 		
 		//newData.setUpdateTime(new Timestamp(new Date().getTime()));
 		
@@ -120,7 +121,9 @@ public class APIController {
 		
 		System.out.println(updateTime.getTime());
 		
-		newData.setUpdateTime(updateTime.getTime());
+		//newData.setUpdateTime(updateTime.getTime());
+		
+		newData.setUpdateTime(new Date());
 		
 		newData.setMappedDevice(device);
 		

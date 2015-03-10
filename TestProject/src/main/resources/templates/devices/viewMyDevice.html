@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://thymeleaf.org">
+<head>
+	<meta charset="UTF-8" />
+	<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="description" content="" />
+    <meta name="author" content="" />
+    
+    <!-- Bootstrap Core CSS -->
+    <link href="/css/bootstrap.min.css" rel="stylesheet" />
+    
+    <!-- Custom CSS -->
+    <link href="/css/modern-business.css" rel="stylesheet" />
+
+    <!-- Custom Fonts -->
+    <link href="/font-awesome/css/font-awesome.min.css" rel="stylesheet" type="text/css" />
+    
+<title>Device Detail</title>
+</head>
+<body>
+ 	<!-- Include Top Menu(Navigation bar) -->
+	<div th:include="topMenu :: topMenu"></div>
+
+	<!-- Page Content -->
+    <div class="container">
+    
+		<!-- Page Heading/Breadcrumbs -->
+        <div class="row">
+            <div class="col-lg-12">
+                <h1 class="page-header">Device
+                    <small>Management</small>
+                </h1>
+                <ol class="breadcrumb">
+                    <li><a href="/index">Home</a>
+                    </li>
+                    <li><a href="/devices/myDevices">My Devices</a>
+                    </li>
+                    <li class="active">My Devices</li>
+                </ol>
+            </div>
+        </div>
+        <!-- /.row -->
+        
+	</div>
+     <!-- /.container -->
+
+    <!-- jQuery -->
+    <script src="/js/jquery.js"></script>
+
+    <!-- Bootstrap Core JavaScript -->
+    <script src="/js/bootstrap.min.js"></script>
+
+    <!-- high chart -->
+    <script src="/js/highcharts.js"></script>
+</body>
+</html>

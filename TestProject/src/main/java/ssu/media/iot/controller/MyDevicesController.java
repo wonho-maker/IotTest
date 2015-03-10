@@ -8,6 +8,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -55,6 +56,8 @@ public class MyDevicesController {
 		for (Devices devices : loginUserDeivices) {
 			if(devices.getApiKey() != null)
 				System.out.println(devices.getApiKey().getApiKey());
+			
+			
 		}
 		//Collection<Devices> devices3 = devicesRepository.findOne(loginUser.getId());
 		
@@ -62,6 +65,24 @@ public class MyDevicesController {
 		
 		
 		return "devices/myDevices";
+	}
+	
+	/**
+	 * 
+	 * @param authentication
+	 * @param model
+	 * @return
+	 */
+	@RequestMapping(value="/viewMyDevice/{deviceId}", method=RequestMethod.GET)
+	public String viewMyDeviceDetail(Authentication authentication, Model model,
+									@PathVariable Long deviceId)
+	{
+		
+		Devices device = devicesRepository.findOne(deviceId);
+		
+		model.addAttribute("device", device);
+		
+		return "devices/viewMyDevice";
 	}
 	
 	/**
@@ -76,7 +97,7 @@ public class MyDevicesController {
 	}
 	
 	@RequestMapping(value = "/newMyDevice", method = RequestMethod.POST)
-	public String addNewMyDevice(Authentication authentication, Devices device, @RequestParam(value="filedsNumber") int filedNumber)
+	public String addNewMyDevice(Authentication authentication, Devices device, @RequestParam(value="fieldsNumber") int fieldNumber)
 	{
 		try
 		{
@@ -84,7 +105,7 @@ public class MyDevicesController {
 			TestUser loginUser = getLoginUser(authentication.getName());
 			
 			device.setOwnner(loginUser);
-			filedNameGenerator(device, filedNumber);
+			fieldNameGenerator(device, fieldNumber);
 			
 			APIKeys newApiKey = new APIKeys(getNewApiKey(), new Date());
 			newApiKey.setApiOwnner(device);
@@ -118,22 +139,22 @@ public class MyDevicesController {
 		
 	}
 	
-	public Devices filedNameGenerator(Devices device, int filedNumber)
+	public Devices fieldNameGenerator(Devices device, int fieldNumber)
 	{
-		if(1 <= filedNumber)
-			device.setDataName1("filed 1");
+		if(1 <= fieldNumber)
+			device.setDataName1("field 1");
 		
-		if(2 <= filedNumber)
-			device.setDataName2("filed 2");
+		if(2 <= fieldNumber)
+			device.setDataName2("field 2");
 		
-		if(3 <= filedNumber)
-			device.setDataName3("filed 3");
+		if(3 <= fieldNumber)
+			device.setDataName3("field 3");
 		
-		if(4 <= filedNumber)
-			device.setDataName4("filed 4");
+		if(4 <= fieldNumber)
+			device.setDataName4("field 4");
 		
-		if(5 <= filedNumber)
-			device.setDataName5("filed 5");
+		if(5 <= fieldNumber)
+			device.setDataName5("field 5");
 		
 		return device;
 	

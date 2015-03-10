@@ -55,7 +55,7 @@
         <!-- Project One -->
         <div class="row">
             <div class="col-md-7">
-                <iframe width="100%" height="350" style="border: 1px solid #cccccc;" th:src="@{'/chart/devices/'+${myDevice.id}}" ></iframe>
+                <iframe width="100%" height="350" style="border: 1px solid #cccccc;" th:src="@{'/chart/devices/'+${myDevice.id}(key=${myDevice.apiKey.apiKey})}" ></iframe>
             </div>
             <div class="col-md-5">
                 <h3 th:text="${myDevice.deviceName}">Project Title</h3>
@@ -63,7 +63,7 @@
                 <h4 th:text="${myDevice.location}">Location</h4>
                 <p th:text="${myDevice.description}">Description</p>   
                 <h4 th:inline="text"><i class="fa fa-tag fa-3"></i> [[${myDevice.tags}]]</h4>
-                <a class="btn btn-primary" href="#">View Device</a>
+                <a class="btn btn-primary" href="#" th:href="@{'/devices/viewMyDevice/'+${myDevice.id}">View Device</a>
             </div>
             
         </div>
@@ -81,8 +81,7 @@
     <!-- Bootstrap Core JavaScript -->
     <script src="/js/bootstrap.min.js"></script>
 
-    <!-- high chart -->
-    <script src="http://code.highcharts.com/highcharts.js"></script>
+   
      
 </body>
 </html>

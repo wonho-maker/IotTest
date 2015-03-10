@@ -68,7 +68,7 @@ public class Devices implements Serializable {
 	private TestUser ownner;
 	
 	@OneToMany(mappedBy = "mappedDevice", cascade = CascadeType.ALL)
-	private List<SensorDataField> dataFileds;
+	private List<SensorDataField> dataFields;
 	
 	@OneToOne(mappedBy = "apiOwnner", cascade = CascadeType.ALL)
 	@JsonBackReference
@@ -78,7 +78,7 @@ public class Devices implements Serializable {
 	
 	
 	public Devices(Long id, String deviceName, String description, String tags,
-			String location, TestUser ownner, List<SensorDataField> dataFileds,
+			String location, TestUser ownner, List<SensorDataField> dataFields,
 			boolean isPublic) {
 		super();
 		this.id = id;
@@ -87,7 +87,7 @@ public class Devices implements Serializable {
 		this.tags = tags;
 		this.location = location;
 		this.ownner = ownner;
-		this.dataFileds = dataFileds;
+		this.dataFields = dataFields;
 		this.isPublic = isPublic;
 	}
 	
@@ -191,12 +191,12 @@ public class Devices implements Serializable {
 		this.ownner = ownner;
 	}
 
-	public List<SensorDataField> getDataFileds() {
-		return dataFileds;
+	public List<SensorDataField> getDataFields() {
+		return dataFields;
 	}
 
-	public void setDataFileds(List<SensorDataField> dataFileds) {
-		this.dataFileds = dataFileds;
+	public void setDataFields(List<SensorDataField> dataFileds) {
+		this.dataFields = dataFileds;
 	}
 
 	public APIKeys getApiKey() {
