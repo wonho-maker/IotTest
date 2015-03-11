@@ -34,7 +34,9 @@ public class SensorDataField implements Serializable{
 	private Long id;
 	
 	private Integer dataValue;
-
+	
+	private Integer fieldNumber;
+	
 	@Temporal(TemporalType.TIMESTAMP)
 	//@DateTimeFormat(iso = ISO.DATE)
 	@JsonFormat(pattern="yyyy-MM-dd hh:mm:ss")
@@ -43,16 +45,17 @@ public class SensorDataField implements Serializable{
 	@ManyToOne
 	@JsonBackReference
 	@JoinColumn(name = "mapped_field_id")
-	private Fields mappedField;
+	private Devices mappedField;
 
 
 	
-	public SensorDataField(Long id, Integer dataValue, Date updateTime,
-			Fields mappedField) {
+	public SensorDataField(Long id, Integer dataValue, Date updateTime, Integer fieldNumber,
+			Devices mappedField) {
 		super();
 		this.id = id;
 		this.dataValue = dataValue;
 		this.updateTime = updateTime;
+		this.fieldNumber = fieldNumber;
 		this.mappedField = mappedField;
 	}
 
@@ -77,11 +80,11 @@ public class SensorDataField implements Serializable{
 		this.dataValue = dataValue;
 	}
 
-	public Fields getMappedField() {
+	public Devices getMappedField() {
 		return mappedField;
 	}
 
-	public void setMappedField(Fields mappedField) {
+	public void setMappedField(Devices mappedField) {
 		this.mappedField = mappedField;
 	}
 
@@ -96,6 +99,14 @@ public class SensorDataField implements Serializable{
 
 	public static long getSerialversionuid() {
 		return serialVersionUID;
+	}
+
+	public Integer getFieldNumber() {
+		return fieldNumber;
+	}
+
+	public void setFieldNumber(Integer fieldNumber) {
+		this.fieldNumber = fieldNumber;
 	}
 
 	

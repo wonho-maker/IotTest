@@ -62,7 +62,7 @@ public class Devices implements Serializable {
 	
 	private boolean isPublic;
 	
-	@OneToOne(mappedBy = "fieldOwnner", cascade = CascadeType.ALL)
+	/*@OneToOne(mappedBy = "fieldOwnner", cascade = CascadeType.ALL)
 	private Fields dataField1 = new Fields();
 	
 	@OneToOne(mappedBy = "fieldOwnner", cascade = CascadeType.ALL)
@@ -75,7 +75,10 @@ public class Devices implements Serializable {
 	private Fields dataField4 = new Fields();
 	
 	@OneToOne(mappedBy = "fieldOwnner", cascade = CascadeType.ALL)
-	private Fields dataField5 = new Fields();
+	private Fields dataField5 = new Fields();*/
+	
+	@OneToMany(mappedBy = "mappedField", cascade = CascadeType.ALL)
+	private List<SensorDataField> dataField;
 	
 	@ManyToOne
 	@JsonBackReference
@@ -110,11 +113,11 @@ public class Devices implements Serializable {
 		this.dataName4 = dataName4;
 		this.dataName5 = dataName5;
 		this.isPublic = isPublic;
-		this.dataField1 = dataField1;
+		/*this.dataField1 = dataField1;
 		this.dataField2 = dataField2;
 		this.dataField3 = dataField3;
 		this.dataField4 = dataField4;
-		this.dataField5 = dataField5;
+		this.dataField5 = dataField5;*/
 		this.ownner = ownner;
 		this.apiKey = apiKey;
 	}
@@ -218,7 +221,7 @@ public class Devices implements Serializable {
 		this.isPublic = isPublic;
 	}
 
-	public Fields getDataField1() {
+	/*public Fields getDataField1() {
 		return dataField1;
 	}
 
@@ -256,10 +259,20 @@ public class Devices implements Serializable {
 
 	public void setDataField5(Fields dataField5) {
 		this.dataField5 = dataField5;
-	}
-
+	}*/
+	
+	
+	
 	public TestUser getOwnner() {
 		return ownner;
+	}
+
+	public List<SensorDataField> getDataField() {
+		return dataField;
+	}
+
+	public void setDataField(List<SensorDataField> dataField) {
+		this.dataField = dataField;
 	}
 
 	public void setOwnner(TestUser ownner) {

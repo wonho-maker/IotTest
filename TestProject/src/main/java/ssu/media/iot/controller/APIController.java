@@ -17,6 +17,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import ssu.media.iot.domain.Devices;
 import ssu.media.iot.domain.SensorDataField;
+import ssu.media.iot.service.DataFieldService;
 import ssu.media.iot.service.DeviceService;
 import ssu.media.iot.service.DevicesRepository;
 import ssu.media.iot.service.SensorDataFieldRepository;
@@ -34,6 +35,9 @@ public class APIController {
 	
 	@Autowired
 	public DeviceService deviceService;
+	
+	@Autowired
+	public DataFieldService dataFieldService;
 	
 	@RequestMapping(value = "/devices/{deviceId}", method = RequestMethod.GET)
 	public List<Devices> getDeviceData(@PathVariable Long deviceId,
@@ -76,21 +80,14 @@ public class APIController {
 				
 				return deviceList;
 			}
-			
 		}
 		
-		
-		/*Devices device = deviceRepository.findOne(deviceId);
-		
-		System.out.println(device.getApiKey().getApiKey());
-		
-		return device;*/
 	}
 	
 	@RequestMapping(value = "/devices/{deviceId}/fields/{fieldId}", method = RequestMethod.GET)
-	public Devices getFieldData(@PathVariable Long deviceId, @PathVariable Long fieldId)
+	public Devices getFieldData(@PathVariable Long deviceId, @PathVariable Integer fieldId)
 	{
-		Devices device = deviceRepository.findOne(deviceId);
+		Devices device = deviceService.getDeviceAndDataField(deviceId, fieldId);
 		
 		//List<SensorDataField> dataField = sensorDataFieldRepo.findByDeviceFieldOne(device);
 		
@@ -111,38 +108,31 @@ public class APIController {
 	{
 		
 		try{
-		Devices device = deviceService.findDeviceByApiKey(apiKey);
 		
 		Date uDate = new Date();
 		
-		if(device.getDataName1() != null && value1 != null)
-		{	
-			SensorDataField newData = new SensorDataField();
-			newData.setDataValue(value1);
-			newData.setUpdateTime(uDate);
-			newData.setMappedField(device.getDataField1());
-			sensorDataFieldRepo.save(newData);
+		if(value1 != null) {
+			dataFieldService.storeDataToDeviceField(apiKey, value1, 1, uDate);
 		}
-		/*if(device.getDataName2() != null && value2 != null)
-		if(device.getDataName3() != null && value3 != null)
-		if(device.getDataName4() != null && value4 != null)
-		if(device.getDataName5() != null && value5 != null)*/
+		if(value2 != null) {
+			dataFieldService.storeDataToDeviceField(apiKey, value2, 2, uDate);
+		}
+		if(value3 != null) {
+			dataFieldService.storeDataToDeviceField(apiKey, value3, 3, uDate);
+		}
+		if(value4 != null) {
+			dataFieldService.storeDataToDeviceField(apiKey, value4, 4, uDate);
+		}
+		if(value5 != null) {
+			dataFieldService.storeDataToDeviceField(apiKey, value5, 5, uDate);
+		}
 		
 		//newData.setUpdateTime(new Timestamp(new Date().getTime()));
 		
 		//TimeZone timeZone = TimeZone.getTimeZone("Asia/Seoul"); 
 		//Calendar updateTime = Calendar.getInstance(timeZone);
 		
-		//updateTime.setTime(new Date());
-		
-		//newData.setUpdateTime(updateTime.getTime());
-		
-		//newData.setUpdateTime(new Date());
-		
-		//newData.setMappedDevice(device);
-		
-		//sensorDataFieldRepo.save(newData);
-		
+	
 		return "sucess";
 		}
 		catch(Exception e)

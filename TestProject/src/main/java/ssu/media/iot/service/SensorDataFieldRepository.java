@@ -1,6 +1,7 @@
 package ssu.media.iot.service;
 
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Query;
 
 import ssu.media.iot.domain.SensorDataField;
 import ssu.media.iot.domain.Devices;
@@ -9,6 +10,10 @@ import java.util.List;
 
 
 public interface SensorDataFieldRepository extends JpaRepository<SensorDataField, Long> {
+	
+	@Query("select data_value, field_number, update_time"
+			+"from sensor_data_field where mapped_field_id = ?1")
+	List<SensorDataField> findByDeviceIdAndFieldNumber(Long DeviceId, Integer fieldNumber);
 	
 	//@PersistenceContext
 	//private EntityManager em;

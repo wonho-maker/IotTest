@@ -23,8 +23,8 @@ public class Fields {
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long id;
 	
-	@OneToMany(mappedBy = "mappedField", cascade = CascadeType.ALL)
-	private List<SensorDataField> dataField;
+	/*@OneToMany(mappedBy = "mappedField", cascade = CascadeType.ALL)
+	private List<SensorDataField> dataField;*/
 	
 	@OneToOne
 	@JsonBackReference
@@ -34,7 +34,7 @@ public class Fields {
 	public Fields(Long id, List<SensorDataField> dataField) {
 		super();
 		this.id = id;
-		this.dataField = dataField;
+		//this.dataField = dataField;
 	}
 	
 	public Fields()
@@ -50,13 +50,13 @@ public class Fields {
 		this.id = id;
 	}
 
-	public List<SensorDataField> getDataField() {
+	/*public List<SensorDataField> getDataField() {
 		return dataField;
 	}
 
 	public void setDataField(List<SensorDataField> dataField) {
 		this.dataField = dataField;
-	}
+	}*/
 	
 	
 }
