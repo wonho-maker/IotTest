@@ -87,6 +87,19 @@ public class APIController {
 		return device;*/
 	}
 	
+	@RequestMapping(value = "/devices/{deviceId}/fields/{fieldId}", method = RequestMethod.GET)
+	public Devices getFieldData(@PathVariable Long deviceId, @PathVariable Long fieldId)
+	{
+		Devices device = deviceRepository.findOne(deviceId);
+		
+		//List<SensorDataField> dataField = sensorDataFieldRepo.findByDeviceFieldOne(device);
+		
+		//System.out.println(dataField);
+		
+		return device;
+	
+	}
+	
 	@RequestMapping(value = "/update", method = {RequestMethod.GET, RequestMethod.POST})
 	public String updateDeviceData(@RequestParam(value="key") String apiKey,
 								@RequestParam(value="field1", required=false) Integer value1,
@@ -100,34 +113,35 @@ public class APIController {
 		try{
 		Devices device = deviceService.findDeviceByApiKey(apiKey);
 		
-		SensorDataField newData = new SensorDataField();
+		Date uDate = new Date();
 		
 		if(device.getDataName1() != null && value1 != null)
-			newData.setDataValue1(value1);
-		if(device.getDataName2() != null && value2 != null)
-			newData.setDataValue2(value2);
+		{	
+			SensorDataField newData = new SensorDataField();
+			newData.setDataValue(value1);
+			newData.setUpdateTime(uDate);
+			newData.setMappedField(device.getDataField1());
+			sensorDataFieldRepo.save(newData);
+		}
+		/*if(device.getDataName2() != null && value2 != null)
 		if(device.getDataName3() != null && value3 != null)
-			newData.setDataValue3(value3);
 		if(device.getDataName4() != null && value4 != null)
-			newData.setDataValue4(value4);
-		if(device.getDataName5() != null && value5 != null)
-			newData.setDataValue5(value5);
+		if(device.getDataName5() != null && value5 != null)*/
 		
 		//newData.setUpdateTime(new Timestamp(new Date().getTime()));
 		
-		TimeZone timeZone = TimeZone.getTimeZone("Asia/Seoul"); 
-		Calendar updateTime = Calendar.getInstance(timeZone);
-		updateTime.setTime(new Date());
+		//TimeZone timeZone = TimeZone.getTimeZone("Asia/Seoul"); 
+		//Calendar updateTime = Calendar.getInstance(timeZone);
 		
-		System.out.println(updateTime.getTime());
+		//updateTime.setTime(new Date());
 		
 		//newData.setUpdateTime(updateTime.getTime());
 		
-		newData.setUpdateTime(new Date());
+		//newData.setUpdateTime(new Date());
 		
-		newData.setMappedDevice(device);
+		//newData.setMappedDevice(device);
 		
-		sensorDataFieldRepo.save(newData);
+		//sensorDataFieldRepo.save(newData);
 		
 		return "sucess";
 		}

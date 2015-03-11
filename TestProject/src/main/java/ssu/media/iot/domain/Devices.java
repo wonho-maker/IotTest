@@ -62,13 +62,27 @@ public class Devices implements Serializable {
 	
 	private boolean isPublic;
 	
+	@OneToOne(mappedBy = "fieldOwnner", cascade = CascadeType.ALL)
+	private Fields dataField1 = new Fields();
+	
+	@OneToOne(mappedBy = "fieldOwnner", cascade = CascadeType.ALL)
+	private Fields dataField2 = new Fields();
+	
+	@OneToOne(mappedBy = "fieldOwnner", cascade = CascadeType.ALL)
+	private Fields dataField3 = new Fields();
+	
+	@OneToOne(mappedBy = "fieldOwnner", cascade = CascadeType.ALL)
+	private Fields dataField4 = new Fields();
+	
+	@OneToOne(mappedBy = "fieldOwnner", cascade = CascadeType.ALL)
+	private Fields dataField5 = new Fields();
+	
 	@ManyToOne
 	@JsonBackReference
 	@JoinColumn(name = "ownner_id")
 	private TestUser ownner;
 	
-	@OneToMany(mappedBy = "mappedDevice", cascade = CascadeType.ALL)
-	private List<SensorDataField> dataFields;
+	
 	
 	@OneToOne(mappedBy = "apiOwnner", cascade = CascadeType.ALL)
 	@JsonBackReference
@@ -77,20 +91,34 @@ public class Devices implements Serializable {
 	
 	
 	
+
 	public Devices(Long id, String deviceName, String description, String tags,
-			String location, TestUser ownner, List<SensorDataField> dataFields,
-			boolean isPublic) {
+			String location, String dataName1, String dataName2,
+			String dataName3, String dataName4, String dataName5,
+			boolean isPublic, Fields dataField1, Fields dataField2,
+			Fields dataField3, Fields dataField4, Fields dataField5,
+			TestUser ownner, APIKeys apiKey) {
 		super();
 		this.id = id;
 		this.deviceName = deviceName;
 		this.description = description;
 		this.tags = tags;
 		this.location = location;
-		this.ownner = ownner;
-		this.dataFields = dataFields;
+		this.dataName1 = dataName1;
+		this.dataName2 = dataName2;
+		this.dataName3 = dataName3;
+		this.dataName4 = dataName4;
+		this.dataName5 = dataName5;
 		this.isPublic = isPublic;
+		this.dataField1 = dataField1;
+		this.dataField2 = dataField2;
+		this.dataField3 = dataField3;
+		this.dataField4 = dataField4;
+		this.dataField5 = dataField5;
+		this.ownner = ownner;
+		this.apiKey = apiKey;
 	}
-	
+
 	public Devices(String deviceName)
 	{
 		super();
@@ -101,8 +129,7 @@ public class Devices implements Serializable {
 	{
 		
 	}
-	
-	
+
 	public Long getId() {
 		return id;
 	}
@@ -183,6 +210,54 @@ public class Devices implements Serializable {
 		this.dataName5 = dataName5;
 	}
 
+	public boolean isPublic() {
+		return isPublic;
+	}
+
+	public void setPublic(boolean isPublic) {
+		this.isPublic = isPublic;
+	}
+
+	public Fields getDataField1() {
+		return dataField1;
+	}
+
+	public void setDataField1(Fields dataField1) {
+		this.dataField1 = dataField1;
+	}
+
+	public Fields getDataField2() {
+		return dataField2;
+	}
+
+	public void setDataField2(Fields dataField2) {
+		this.dataField2 = dataField2;
+	}
+
+	public Fields getDataField3() {
+		return dataField3;
+	}
+
+	public void setDataField3(Fields dataField3) {
+		this.dataField3 = dataField3;
+	}
+
+	public Fields getDataField4() {
+		return dataField4;
+	}
+
+	public void setDataField4(Fields dataField4) {
+		this.dataField4 = dataField4;
+	}
+
+	public Fields getDataField5() {
+		return dataField5;
+	}
+
+	public void setDataField5(Fields dataField5) {
+		this.dataField5 = dataField5;
+	}
+
 	public TestUser getOwnner() {
 		return ownner;
 	}
@@ -191,28 +266,12 @@ public class Devices implements Serializable {
 		this.ownner = ownner;
 	}
 
-	public List<SensorDataField> getDataFields() {
-		return dataFields;
-	}
-
-	public void setDataFields(List<SensorDataField> dataFileds) {
-		this.dataFields = dataFileds;
-	}
-
 	public APIKeys getApiKey() {
 		return apiKey;
 	}
 
 	public void setApiKey(APIKeys apiKey) {
 		this.apiKey = apiKey;
-	}
-
-	public boolean isPublic() {
-		return isPublic;
-	}
-
-	public void setPublic(boolean isPublic) {
-		this.isPublic = isPublic;
 	}
 
 	public static long getSerialversionuid() {

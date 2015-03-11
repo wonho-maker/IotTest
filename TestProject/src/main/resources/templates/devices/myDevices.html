@@ -63,7 +63,7 @@
                 <h4 th:text="${myDevice.location}">Location</h4>
                 <p th:text="${myDevice.description}">Description</p>   
                 <h4 th:inline="text"><i class="fa fa-tag fa-3"></i> [[${myDevice.tags}]]</h4>
-                <a class="btn btn-primary" href="#" th:href="@{'/devices/viewMyDevice/'+${myDevice.id}">View Device</a>
+                <a class="btn btn-primary" href="#" th:href="@{'/devices/viewMyDevice/'+${myDevice.id}}">View Device</a>
             </div>
             
         </div>
