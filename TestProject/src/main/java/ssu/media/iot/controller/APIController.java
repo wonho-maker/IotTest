@@ -1,12 +1,6 @@
 package ssu.media.iot.controller;
 
-import java.sql.Timestamp;
-import java.util.ArrayList;
-import java.util.Calendar;
 import java.util.Date;
-import java.util.List;
-import java.util.Locale;
-import java.util.TimeZone;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -16,22 +10,13 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import ssu.media.iot.domain.Devices;
-import ssu.media.iot.domain.SensorDataField;
 import ssu.media.iot.service.DataFieldService;
 import ssu.media.iot.service.DeviceService;
-import ssu.media.iot.service.DevicesRepository;
-import ssu.media.iot.service.SensorDataFieldRepository;
 
 
 @RestController
 @RequestMapping(value = "/api")
 public class APIController {
-	
-	@Autowired
-	public DevicesRepository deviceRepository;
-	
-	@Autowired
-	public SensorDataFieldRepository sensorDataFieldRepo;
 	
 	@Autowired
 	public DeviceService deviceService;
@@ -40,58 +25,19 @@ public class APIController {
 	public DataFieldService dataFieldService;
 	
 	@RequestMapping(value = "/devices/{deviceId}", method = RequestMethod.GET)
-	public List<Devices> getDeviceData(@PathVariable Long deviceId,
+	public Devices getDeviceData(@PathVariable Long deviceId,
 									@RequestParam(value="key", required=false) String apiKey)
 									
 	{
-		Devices device = deviceRepository.findOne(deviceId);
 		
-		System.out.println(device.getApiKey().getApiKey());
-		
-		List<Devices> deviceList = new ArrayList<Devices>();
-		
-		if(device.isPublic())
-		{
-			
-			deviceList.add(device);
-			
-			return deviceList;
-			
-		}
-		else
-		{
-			if(apiKey == null)
-			{
-				
-				deviceList.add(new Devices("This device is private"));
-				
-				return deviceList;
-			}
-			else
-			{
-				if(device.getApiKey().getApiKey().equals(apiKey))
-				{
-					deviceList.add(device);
-					
-					return deviceList;
-				}
-				
-				deviceList.add(new Devices("wrong api key"));
-				
-				return deviceList;
-			}
-		}
-		
+		return deviceService.findByDeviceId(deviceId, apiKey);
 	}
 	
 	@RequestMapping(value = "/devices/{deviceId}/fields/{fieldId}", method = RequestMethod.GET)
-	public Devices getFieldData(@PathVariable Long deviceId, @PathVariable Integer fieldId)
+	public Devices getFieldData(@PathVariable Long deviceId, @PathVariable Integer fieldId,
+								@RequestParam(value="key", required=false) String apiKey)
 	{
-		Devices device = deviceService.getDeviceAndDataField(deviceId, fieldId);
-		
-		//List<SensorDataField> dataField = sensorDataFieldRepo.findByDeviceFieldOne(device);
-		
-		//System.out.println(dataField);
+		Devices device = deviceService.getDeviceAndDataField(deviceId, fieldId, apiKey);
 		
 		return device;
 	

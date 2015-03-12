@@ -34,8 +34,6 @@
     			currentId += "?key=" + apiKey;
     		}
     		
-    		//currentId = "http://localhost/api/devices/1";
-    		//console.log(currentId);
 			return currentId;
     	}           
            
@@ -53,33 +51,22 @@
 					date.substring(14,16), date.substring(17,19)) - (myOffset * 60000);
 		}
     	
-   		function getAvailableFields(jsonData){
+		function getAvailableFields(jsonData){
     		
     		var availableField = new Array(5);
     		
-    		if(jsonData[0].dataName1 != null)
-    			availableField[0] = jsonData[0].dataName1;
-    		if(jsonData[0].dataName2 != null)
-    			availableField[1] = jsonData[0].dataName2;
-    		if(jsonData[0].dataName3 != null)
-    			availableField[2] = jsonData[0].dataName3;
-    		if(jsonData[0].dataName4 != null)
-    			availableField[3] = jsonData[0].dataName4;
-    		if(jsonData[0].dataName5 != null)
-    			availableField[4] = jsonData[0].dataName5;
+    		if(jsonData.dataName1 != null)
+    			availableField[0] = jsonData.dataName1;
+    		if(jsonData.dataName2 != null)
+    			availableField[1] = jsonData.dataName2;
+    		if(jsonData.dataName3 != null)
+    			availableField[2] = jsonData.dataName3;
+    		if(jsonData.dataName4 != null)
+    			availableField[3] = jsonData.dataName4;
+    		if(jsonData.dataName5 != null)
+    			availableField[4] = jsonData.dataName5;
     		
     		return availableField;
-    	}
-    	
-    	function getAvailableFieldsLength(availableFields)
-    	{
-    		var length = 0;
-    		$.each(availableFields, function(i, value){
-    			if(value == 1)
-    				length++;
-    		});
-    		
-    		return length;
     	}
     	
     	function getValidFieldsData(fields)
@@ -113,13 +100,11 @@
     	{
     		var chartDataArray = new Array(length);
     		
-    		console.log(chartDataArray.length);
     		
     		$.each(chartDataArray, function(i, value) {
     			chartDataArray[i] = [];
     		});
     			
-    		
     		return chartDataArray;
     	}
     	
@@ -171,77 +156,64 @@
 		    };
 			
 			
-		    $.getJSON(getCurrentId(), function(jsonData) {
-		        
-		    	if(jsonData[0].id == null) {
-		    		$('#subtitle').append(jsonData[0].deviceName);
-		    		//console.log(jsonData[0].deviceName);
-		    		//console.log("ok");
-		    		return;
-		    	}
-		    		
-		    	
-		    	var availableFields = getAvailableFields(jsonData);
-		    	
-		        var chartDataArray = allocateChartArray(availableFields.length);
-		        
-		        $.each(jsonData, function(i, data)
-		        {
-		        	
-		        	var chartData = [];
-		        	$.each(data.dataFields, function(k, field)
-		        	{
-		        		
-		        		var validData = getValidFieldsData(field);
-		        		 
-		        		$.each(validData, function(m, vData) {
-		        			var point = new Highcharts.Point();
-		        			
-				        	point.x = getChartDate(field.updateTime);
-					        point.y = parseFloat(vData);
-		        			
-					        chartDataArray[m].push(point);
-					        
-		        		});
-						
-		        	});
-		        	
+		$.getJSON(getCurrentId(), function(jsonData) {
+	    	
+	    	if(jsonData.id == null) {
+	    		$('#subtitle').append(jsonData.deviceName);
+	    		return;
+	    	}
+	        
+	    	var availableFields = getAvailableFields(jsonData);
+	    	
+	        var chartDataArray = allocateChartArray(availableFields.length);
+	        
+	      
+	        	var chartData = [];
+	        	$.each(jsonData.dataFields, function(k, field)
+			    {
+			        var point = new Highcharts.Point();
+			        			
+					point.x = getChartDate(field.updateTime);
+					point.y = parseFloat(field.dataValue);
+			        			
+					chartDataArray[field.fieldNumber - 1].push(point);
+							
 			    });
-		        
-		      //set series and series's name
-		        var series = [];
-		        
-		        $.each(availableFields, function(i, value){
-		        	if(value != null) {
-		        		var seriesTemp = new Highcharts.Series();
-		        		seriesTemp.name = value;
-		        		series.push(seriesTemp);
-		        	}
-		        });
-		        
-		        options.series = series;
-				
-		        //set data to series
-		        var k = 0;
-		        
-		        $.each(availableFields, function(j, aFields){
-		        	if(aFields != null) {
-		        		options.series[k].data = chartDataArray[k];
-			        	options.series[k].name = aFields;
-			        	k++;
-		        	}
-		        	else {
-		        		
-		        	}
-		        	
-		        });
-		        
-		        //set chart title
-		    	options.title.text = jsonData[0].deviceName;;
-				
-		    	//apply chart
-		        var chart = new Highcharts.Chart(options);
-		    });
+	      //set series and series's name
+	        var series = [];
+	        
+	      	
+	        $.each(availableFields, function(i, value){
+	        	if(value != null) {
+	        		var seriesTemp = new Highcharts.Series();
+	        		seriesTemp.name = value;
+	        		series.push(seriesTemp);
+	        	}
+	        });
+	        
+	        options.series = series;
+			
+	        //set data to series
+	        var k = 0;
+	        
+	        $.each(availableFields, function(j, aFields){
+	        	if(aFields != null) {
+	        		options.series[k].data = chartDataArray[j];
+		        	options.series[k].name = aFields;
+		        	k++;
+	        	}
+	        	else {
+	        		
+	        	}
+	        	
+	        });
+	        
+	        //set chart title
+	    	options.title.text = jsonData.deviceName;;
+			
+	    	//apply chart
+	        var chart = new Highcharts.Chart(options);
+	    });
 
 	});
 				

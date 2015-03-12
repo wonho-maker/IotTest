@@ -35,6 +35,7 @@ public class MyDevicesController {
 	
 	@Autowired
 	private APIKeysRepository apiKeyRepository;
+	
 	/**
 	 * Show user's device list
 	 * 
@@ -49,20 +50,9 @@ public class MyDevicesController {
 		
 		TestUser loginUser = getLoginUser(authentication.getName());
 		
-		//devicesRepository.save(new Devices("test device", "test description", "temp", "507", "v1", "v2", "v3", false, loginUser));
-		
 		Collection<Devices> loginUserDeivices = devicesRepository.findByOwnner(loginUser);
 		
-		for (Devices devices : loginUserDeivices) {
-			if(devices.getApiKey() != null)
-				System.out.println(devices.getApiKey().getApiKey());
-			
-			
-		}
-		//Collection<Devices> devices3 = devicesRepository.findOne(loginUser.getId());
-		
 		model.addAttribute("myDevices", loginUserDeivices);
-		
 		
 		return "devices/myDevices";
 	}
@@ -79,6 +69,8 @@ public class MyDevicesController {
 	{
 		
 		Devices device = devicesRepository.findOne(deviceId);
+		
+		
 		
 		model.addAttribute("device", device);
 		

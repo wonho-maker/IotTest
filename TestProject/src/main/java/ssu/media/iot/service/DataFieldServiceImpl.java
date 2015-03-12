@@ -12,7 +12,6 @@ import ssu.media.iot.domain.SensorDataField;
 
 
 @Component("dataFieldService")
-@Transactional
 public class DataFieldServiceImpl implements DataFieldService{
 	
 	

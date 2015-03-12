@@ -11,9 +11,8 @@ import java.util.List;
 
 public interface SensorDataFieldRepository extends JpaRepository<SensorDataField, Long> {
 	
-	@Query("select data_value, field_number, update_time"
-			+"from sensor_data_field where mapped_field_id = ?1")
-	List<SensorDataField> findByDeviceIdAndFieldNumber(Long DeviceId, Integer fieldNumber);
+	@Query("SELECT d FROM SensorDataField d WHERE d.mappedField = ?1 AND d.fieldNumber = ?2")
+	List<SensorDataField> findByDeviceIdAndFieldNumber(Devices device, Integer fieldNumber);
 	
 	//@PersistenceContext
 	//private EntityManager em;

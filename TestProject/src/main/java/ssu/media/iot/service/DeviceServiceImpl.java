@@ -12,7 +12,6 @@ import ssu.media.iot.domain.Devices;
 import ssu.media.iot.domain.SensorDataField;
 
 @Component("deviceService")
-@Transactional
 public class DeviceServiceImpl implements DeviceService{
 
 	@Autowired
@@ -43,17 +42,90 @@ public class DeviceServiceImpl implements DeviceService{
 	}
 	
 	@Override
+	public Devices findByDeviceId(Long deviceId, String apiKey) {
+		
+		Devices device = deviceRepo.findOne(deviceId);
+		
+		
+		String checkString = isPublicField(device, apiKey);
+		
+		if(checkString.equals("OK"))
+		{
+			return device;
+		}
+		else
+		{
+			return new Devices(checkString);
+		}
+		
+	}
+	
+	@Override
 	public Devices getDeviceAndDataField(Long DeviceId,
-			Integer fieldNumber) {
+			Integer fieldNumber, String apiKey) {
 		
 		Devices device = deviceRepo.findOne(DeviceId);
 		
-		List<SensorDataField> dataField =  sDataFieldRepo.findByDeviceIdAndFieldNumber(DeviceId, fieldNumber);
+		String checkString = isPublicField(device, apiKey);
 		
-		device.setDataField(dataField);
-		
-		//device.getDataField()
-		
-		return device;
+		if(checkString.equals("OK"))
+		{
+			List<SensorDataField> dataField =  sDataFieldRepo.findByDeviceIdAndFieldNumber(device, fieldNumber);
+			
+			device.setDataFields(dataField);
+			
+			setFieldNameForAPI(device, fieldNumber);
+			
+			return device;
+		}
+		else
+		{
+			return new Devices(checkString);
+		}
+	}
+	
+	@Override
+	public String isPublicField(Devices device, String apiKey) {
+	
+		if(device.isPublic())
+		{
+			return "OK";
+		}
+		else
+		{
+			if(apiKey == null)
+			{
+				
+				return "This device is private";
+			}
+			else
+			{
+				if(device.getApiKey().getApiKey().equals(apiKey))
+				{
+					
+					return "OK";
+				}
+				
+				return "wrong api key";
+			}
+		}
+	}
+	
+	public void setFieldNameForAPI(Devices device, int fieldNumber) {
+		if(fieldNumber == 1) {
+			device.setDataName2(null);device.setDataName3(null);device.setDataName4(null);device.setDataName5(null);
+		}
+		if(fieldNumber == 2) {
+			device.setDataName1(null);device.setDataName3(null);device.setDataName4(null);device.setDataName5(null);
+		}
+		if(fieldNumber == 3) {
+			device.setDataName1(null);device.setDataName2(null);device.setDataName4(null);device.setDataName5(null);
+		}
+		if(fieldNumber == 4) {
+			device.setDataName1(null);device.setDataName2(null);device.setDataName3(null);device.setDataName5(null);
+		}
+		if(fieldNumber == 5) {
+			device.setDataName1(null);device.setDataName2(null);device.setDataName3(null);device.setDataName4(null);
+		}
 	}
 }

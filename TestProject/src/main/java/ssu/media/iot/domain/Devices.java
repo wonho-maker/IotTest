@@ -78,7 +78,7 @@ public class Devices implements Serializable {
 	private Fields dataField5 = new Fields();*/
 	
 	@OneToMany(mappedBy = "mappedField", cascade = CascadeType.ALL)
-	private List<SensorDataField> dataField;
+	private List<SensorDataField> dataFields;
 	
 	@ManyToOne
 	@JsonBackReference
@@ -267,12 +267,12 @@ public class Devices implements Serializable {
 		return ownner;
 	}
 
-	public List<SensorDataField> getDataField() {
-		return dataField;
+	public List<SensorDataField> getDataFields() {
+		return dataFields;
 	}
 
-	public void setDataField(List<SensorDataField> dataField) {
-		this.dataField = dataField;
+	public void setDataFields(List<SensorDataField> dataField) {
+		this.dataFields = dataField;
 	}
 
 	public void setOwnner(TestUser ownner) {

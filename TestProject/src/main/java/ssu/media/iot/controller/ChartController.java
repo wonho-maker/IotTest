@@ -30,8 +30,21 @@ public class ChartController {
 		{
 			model.addAttribute("apiKey", apiKey);
 		}
-		//model.addAttribute("device", deviceRepository.findOne(deviceId));
-		//model.addAttribute("dataField", sensorDataFieldRepo.findByMappedDevice(deviceRepository.findOne(deviceId)));
+		
+		return "chart";
+	}
+	
+	@RequestMapping(value = "/devices/{deviceId}/fields/{fieldNumber}", method = RequestMethod.GET)
+	public String showDeviceFieldChart(@PathVariable Long deviceId, @PathVariable Long fieldNumber, 
+									@RequestParam(value = "key", required = false) String apiKey
+									, Model model)						
+	{
+		if(apiKey != null)
+		{
+			model.addAttribute("apiKey", apiKey);
+		}
+		
+		System.out.println("in");
 		
 		return "chart";
 	}
