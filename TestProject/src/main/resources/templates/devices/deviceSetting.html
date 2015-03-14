@@ -1,0 +1,127 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://thymeleaf.org"
+		xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity3">
+<head>
+	<meta charset="UTF-8" />
+	<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="description" content="" />
+    <meta name="author" content="" />
+    
+    <!-- Bootstrap Core CSS -->
+    <link href="/bootstrap.min.css" rel="stylesheet" />
+    
+    <!-- Custom CSS -->
+    <link href="/css/modern-business.css" rel="stylesheet" />
+
+    <!-- Custom Fonts -->
+    <link href="/font-awesome/css/font-awesome.min.css" rel="stylesheet" type="text/css" />
+    
+<title>Device Setting View</title>
+</head>
+<body>
+	<div th:fragment="deviceSetting">
+		<div class="row"> &thinsp; </div>
+			<div class="row">
+				<div class="col-md-8">
+                <form name="UpdateDeviceForm" th:action="@{'/viewMyDevice/'+${device.id}}" method="post" novalidate="novalidate">
+                    <div class="control-group form-group">
+                        <div class="controls">
+                            <label>Device Name</label>
+                            <input type="text" th:value="${device.deviceName}" class="form-control" id="deviceName" name="deviceName" required="required" data-validation-required-message="Please enter device name." />
+                            <p class="help-block"></p>
+                        </div>
+                    </div>
+                    <div class="control-group form-group">
+                        <div class="controls">
+                            <label>Description</label>
+                            <textarea rows="10" th:text="${device.description}" cols="50" class="form-control" id="description" name="description" required="required" data-validation-required-message="Please enter description." maxlength="999" style="resize:none"></textarea>
+                        </div>
+                    </div>                 
+                    <div class="control-group form-group">
+                        <div class="controls">
+                            <label>Location</label>
+                            <input type="text" th:value="${device.location}" class="form-control" id="location" name="location" required="required" data-validation-required-message="Please enter location." />
+                        </div>
+                    </div>
+                    <div class="control-group form-group">
+                        <div class="controls">
+                            <label>Tags</label>
+                            <input type="text" th:value="${device.tags}" class="form-control" id="tags" name="tags" required="required" data-validation-required-message="Please enter tags" />
+                        </div>
+                    </div>
+                    <div class="control-group form-group">
+                        <div class="controls">
+                            <label>Data Fields</label>
+                            <div class="row">
+                            	<div class="col-xs-4">
+                            		<input type="text" class="form-control" name="dataName1" th:value="${device.dataName1}" />
+                            	</div>
+                            	<div class="col-xs-4">
+                            		<div class="checkbox"><label></label> <input type="checkbox" id="dataNameCheck" value="1" /> </div>
+                            	</div>
+                            </div>
+                            <div class="row">
+                            	<div class="col-xs-4">
+                            		<input type="text" class="form-control" name="dataName2" th:value="${device.dataName2}" />
+                            	</div>
+                            	<div class="col-xs-4">
+                            		<div class="checkbox"><label></label> <input type="checkbox" id="dataNameCheck" value="1" /> </div>
+                            	</div>
+                            </div>
+                            <div class="row">
+                            	<div class="col-xs-4">
+                            		<input type="text" class="form-control" name="dataName3" th:value="${device.dataName3}" />
+                            	</div>
+                            	<div class="col-xs-4">
+                            		<div class="checkbox"><label></label> <input type="checkbox" id="dataNameCheck" value="1" /> </div>
+                            	</div>
+                            </div>
+                            <div class="row">
+                            	<div class="col-xs-4">
+                            		<input type="text" class="form-control" name="dataName4" th:value="${device.dataName4}" />
+                            	</div>
+                            	<div class="col-xs-4">
+                            		<div class="checkbox"><label></label> <input type="checkbox" id="dataNameCheck" value="1" /> </div>
+                            	</div>
+                            </div>
+                            <div class="row">
+                            	<div class="col-xs-4">
+                            		<input type="text" class="form-control" name="dataName5" th:value="${device.dataName5}" />
+                            	</div>
+                            	<div class="col-xs-4">
+                            		<div class="checkbox"><label></label> <input type="checkbox" id="dataNameCheck" value="1" /> </div>
+                            	</div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- For success/fail messages -->
+                    <button type="submit" class="btn btn-primary">Update Device Setting</button>
+                </form>	
+			</div>
+			<div class="col-md-4">
+				<h3>Help</h3>
+			</div>
+			
+			</div>
+		
+		
+        		
+	</div>
+	<!-- ./container -->
+	
+	<!-- jQuery -->
+    <script src="/js/jquery.js"></script>
+
+    <!-- Bootstrap Core JavaScript -->
+    <script src="/js/bootstrap.min.js"></script>
+    
+    <!-- form validation -->
+	<script src="/js/jqBootstrapValidation.js"></script>
+    <script>
+  		$(function () { $("input,textarea").not("[type=submit]").jqBootstrapValidation(); } );
+	</script>
+	
+</body>
+</html>

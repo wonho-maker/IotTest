@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://thymeleaf.org"
+		xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity3">
+<head>
+	<meta charset="UTF-8" />
+	<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="description" content="" />
+    <meta name="author" content="" />
+    
+    <!-- Bootstrap Core CSS -->
+    <link href="/bootstrap.min.css" rel="stylesheet" />
+    
+    <!-- Custom CSS -->
+    <link href="/css/modern-business.css" rel="stylesheet" />
+
+    <!-- Custom Fonts -->
+    <link href="/font-awesome/css/font-awesome.min.css" rel="stylesheet" type="text/css" />
+    
+<title>Device Field View</title>
+</head>
+<body>
+	<div th:fragment="deviceFieldView">
+		<div class="row"> &thinsp; </div>
+			<div th:each="dNameMap, iterStat : ${dataNameMap}" th:class="${iterStat.odd}? 'row'">
+					<div class="col-md-6">
+						<iframe width="100%" height="350" style="border: 1px solid #cccccc;" 
+						th:src="@{'/chart/devices/'+${device.id}+'/fields/'+${dNameMap.key}(key=${device.apiKey.apiKey})}"></iframe>
+						<h3>
+							<a href="#" th:text="${dNameMap.value}" th:herf="@{'/chart/devices/'+${device.id}+'/fields/'+${dNameMap.key}(key=${device.apiKey.apiKey})}">Field One</a>
+						</h3>
+						<p> </p>
+					</div>
+			</div>
+	</div>
+	
+	<!-- jQuery -->
+    <script src="/js/jquery.js"></script>
+
+    <!-- Bootstrap Core JavaScript -->
+    <script src="/js/bootstrap.min.js"></script>
+</body>
+</html>

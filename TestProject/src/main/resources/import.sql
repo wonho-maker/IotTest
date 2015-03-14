@@ -1,10 +1,4 @@
-insert into Booking(booking_name) values('Kris');
-insert into Booking(booking_name) values('Martin');
-insert into Booking(booking_name) values('Andy');
-insert into Booking(booking_name) values('Josh');
-insert into Booking(booking_name) values('jhu');
-insert into Booking(booking_name) values('dummy');
-
+ 
 insert into users(username, PASSWORD, STUDENT_NUMBER, NAME, role) values('test2','test2', '20072535','tester1', 'ROLE_USER');
 insert into users(username, PASSWORD, STUDENT_NUMBER, NAME, role) values('admin','admin', '20072532','admin', 'ROLE_ADMIN');
 

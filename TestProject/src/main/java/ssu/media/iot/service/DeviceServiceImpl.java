@@ -1,6 +1,8 @@
 package ssu.media.iot.service;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import javax.transaction.Transactional;
 
@@ -127,5 +129,30 @@ public class DeviceServiceImpl implements DeviceService{
 		if(fieldNumber == 5) {
 			device.setDataName1(null);device.setDataName2(null);device.setDataName3(null);device.setDataName4(null);
 		}
+	}
+	
+	@Override
+	public Map<Integer, String> dataNameMap(Devices device) {
+		
+		Map<Integer, String> nameMap = new HashMap<Integer, String>();
+		
+		if(device.getDataName1() != null) {
+			nameMap.put(1, device.getDataName1());
+		}
+		if(device.getDataName2() != null) {
+			nameMap.put(2, device.getDataName2());
+		}
+		if(device.getDataName3() != null) {
+			nameMap.put(3, device.getDataName3());
+		}
+		if(device.getDataName4() != null) {
+			nameMap.put(4, device.getDataName4());
+		}
+		if(device.getDataName5() != null) {
+			nameMap.put(5, device.getDataName5());
+		}
+		
+		
+		return nameMap;
 	}
 }

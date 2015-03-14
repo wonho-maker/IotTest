@@ -3,6 +3,8 @@ package ssu.media.iot.controller;
 
 import java.util.Collection;
 import java.util.Date;
+import java.util.HashMap;
+import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.Authentication;
@@ -18,6 +20,7 @@ import ssu.media.iot.domain.APIKeys;
 import ssu.media.iot.domain.Devices;
 import ssu.media.iot.domain.TestUser;
 import ssu.media.iot.service.APIKeysRepository;
+import ssu.media.iot.service.DeviceService;
 import ssu.media.iot.service.DevicesRepository;
 import ssu.media.iot.service.UserRepository;
 
@@ -35,6 +38,9 @@ public class MyDevicesController {
 	
 	@Autowired
 	private APIKeysRepository apiKeyRepository;
+	
+	@Autowired
+	private DeviceService deviceService;
 	
 	/**
 	 * Show user's device list
@@ -67,12 +73,17 @@ public class MyDevicesController {
 	public String viewMyDeviceDetail(Authentication authentication, Model model,
 									@PathVariable Long deviceId)
 	{
-		
+		System.out.println("in");
 		Devices device = devicesRepository.findOne(deviceId);
 		
-		
-		
 		model.addAttribute("device", device);
+		
+		Map<Integer, String> dataNameMap = deviceService.dataNameMap(device);
+		
+		if(dataNameMap != null){
+		
+		
+		model.addAttribute("dataNameMap", dataNameMap);}
 		
 		return "devices/viewMyDevice";
 	}
