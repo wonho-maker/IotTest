@@ -22,7 +22,7 @@ public class DataFieldServiceImpl implements DataFieldService{
 	DeviceService deviceService;
 	
 	@Override
-	public boolean storeDataToDeviceField(String apiKey, Integer value, int fieldNumber) 
+	public boolean storeDataToDeviceField(String apiKey, String value, int fieldNumber) 
 	{
 		Devices device = deviceService.findDeviceByApiKey(apiKey);
 		
@@ -46,7 +46,7 @@ public class DataFieldServiceImpl implements DataFieldService{
 	}
 	
 	@Override
-	public boolean storeDataToDeviceField(String apiKey, Integer value,
+	public boolean storeDataToDeviceField(String apiKey, String value,
 			int fieldNumber, Date date) {
 		
 		Devices device = deviceService.findDeviceByApiKey(apiKey);

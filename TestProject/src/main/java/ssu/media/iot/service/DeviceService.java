@@ -10,9 +10,11 @@ public interface DeviceService {
 	
 	Devices findDeviceByApiKey(String apiKey);
 	
-	Devices findByDeviceId(Long deviceId, String apiKey);
+	Devices findByDeviceId(Long deviceId, String apiKey, Boolean allData);
 	
-	Devices getDeviceAndDataField(Long DeviceId, Integer fieldNumber, String apiKey);
+	Devices findByDeviceIdAndLastFieldsData(Long deviceId, String apiKey);
+	
+	Devices getDeviceAndDataField(Long DeviceId, Integer fieldNumber, String apiKey, Boolean allData);
 	
 	String isPublicField(Devices device, String apiKey);
 	

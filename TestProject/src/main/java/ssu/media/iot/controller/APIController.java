@@ -24,32 +24,54 @@ public class APIController {
 	@Autowired
 	public DataFieldService dataFieldService;
 	
-	@RequestMapping(value = "/devices/{deviceId}", method = RequestMethod.GET)
-	public Devices getDeviceData(@PathVariable Long deviceId,
+	@RequestMapping(value = "/devices/{deviceId}/fields", method = RequestMethod.GET)
+	public Devices getDeviceFieldsData(@PathVariable Long deviceId,
+									@RequestParam(value="key", required=false) String apiKey,
+									@RequestParam(value="allData", required=false) Boolean allData)
+									
+	{
+		if(allData != null) {
+			return deviceService.findByDeviceId(deviceId, apiKey, allData);
+		}
+		else {
+			return deviceService.findByDeviceId(deviceId, apiKey, false);
+		}
+	}
+	
+	@RequestMapping(value = "/devices/{deviceId}/fields/last", method = RequestMethod.GET)
+	public Devices getDeviceLastFieldsData(@PathVariable Long deviceId,
 									@RequestParam(value="key", required=false) String apiKey)
 									
 	{
-		
-		return deviceService.findByDeviceId(deviceId, apiKey);
+		return deviceService.findByDeviceIdAndLastFieldsData(deviceId, apiKey);
 	}
 	
 	@RequestMapping(value = "/devices/{deviceId}/fields/{fieldId}", method = RequestMethod.GET)
 	public Devices getFieldData(@PathVariable Long deviceId, @PathVariable Integer fieldId,
-								@RequestParam(value="key", required=false) String apiKey)
+								@RequestParam(value="key", required=false) String apiKey,
+								@RequestParam(value="allData", required=false) Boolean allData)
 	{
-		Devices device = deviceService.getDeviceAndDataField(deviceId, fieldId, apiKey);
+		Devices device;
 		
+		if(allData != null) {
+			device = deviceService.getDeviceAndDataField(deviceId, fieldId, apiKey, allData);
+		}
+		else
+		{
+			device = deviceService.getDeviceAndDataField(deviceId, fieldId, apiKey, false);
+		}
+			
 		return device;
 	
 	}
 	
 	@RequestMapping(value = "/update", method = {RequestMethod.GET, RequestMethod.POST})
 	public String updateDeviceData(@RequestParam(value="key") String apiKey,
-								@RequestParam(value="field1", required=false) Integer value1,
-								@RequestParam(value="field2", required=false) Integer value2,
-								@RequestParam(value="field3", required=false) Integer value3,
-								@RequestParam(value="field4", required=false) Integer value4,
-								@RequestParam(value="field5", required=false) Integer value5)
+								@RequestParam(value="field1", required=false) String value1,
+								@RequestParam(value="field2", required=false) String value2,
+								@RequestParam(value="field3", required=false) String value3,
+								@RequestParam(value="field4", required=false) String value4,
+								@RequestParam(value="field5", required=false) String value5)
 								
 	{
 		

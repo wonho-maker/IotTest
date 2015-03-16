@@ -33,7 +33,7 @@ public class SensorDataField implements Serializable{
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long id;
 	
-	private Integer dataValue;
+	private String dataValue;
 	
 	private Integer fieldNumber;
 	
@@ -49,7 +49,7 @@ public class SensorDataField implements Serializable{
 
 
 	
-	public SensorDataField(Long id, Integer dataValue, Date updateTime, Integer fieldNumber,
+	public SensorDataField(Long id, String dataValue, Date updateTime, Integer fieldNumber,
 			Devices mappedField) {
 		super();
 		this.id = id;
@@ -72,11 +72,11 @@ public class SensorDataField implements Serializable{
 		this.id = id;
 	}
 
-	public Integer getDataValue() {
+	public String getDataValue() {
 		return dataValue;
 	}
 
-	public void setDataValue(Integer dataValue) {
+	public void setDataValue(String dataValue) {
 		this.dataValue = dataValue;
 	}
 

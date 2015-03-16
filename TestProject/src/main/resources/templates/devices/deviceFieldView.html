@@ -22,6 +22,7 @@
 <body>
 	<div th:fragment="deviceFieldView">
 		<div class="row"> &thinsp; </div>
+			<h4>Data Fields</h4>
 			<div th:each="dNameMap, iterStat : ${dataNameMap}" th:class="${iterStat.odd}? 'row'">
 					<div class="col-md-6">
 						<iframe width="100%" height="350" style="border: 1px solid #cccccc;" 

@@ -16,15 +16,41 @@
 
     <!-- Custom Fonts -->
     <link href="/font-awesome/css/font-awesome.min.css" rel="stylesheet" type="text/css" />
+
+<script th:fragment="deviceSettingViewHeader">
+	$(document).ready(function (){
+		$('input[type="text"]').each(function(i, v) {
+			if(v.id == "dataName") {
+				if(v.value == "")	{
+					v.disabled = true;
+				}
+				else {
+					$('input[type="checkbox"]')[i-3].checked = true;
+				}
+			}
+				
+		});
+		
+		$('input[type="checkbox"]').on('click', function() {
+			
+			var index = parseInt(this.value) + 2;
+			$('input[type="text"]')[index].disabled = !(this.checked);  
+		});
+	});
+	
+	
+</script>
     
 <title>Device Setting View</title>
 </head>
 <body>
-	<div th:fragment="deviceSetting">
+	<div th:fragment="deviceSettingView">
+
 		<div class="row"> &thinsp; </div>
+			<h4>Device Setting</h4>
 			<div class="row">
 				<div class="col-md-8">
-                <form name="UpdateDeviceForm" th:action="@{'/viewMyDevice/'+${device.id}}" method="post" novalidate="novalidate">
+                <form name="UpdateDeviceForm" th:action="@{'/devices/viewMyDevice/'+${device.id}}" method="post" novalidate="novalidate">
                     <div class="control-group form-group">
                         <div class="controls">
                             <label>Device Name</label>
@@ -55,7 +81,7 @@
                             <label>Data Fields</label>
                             <div class="row">
                             	<div class="col-xs-4">
-                            		<input type="text" class="form-control" name="dataName1" th:value="${device.dataName1}" />
+                            		<input type="text" class="form-control" id="dataName" name="dataName1" th:value="${device.dataName1}" />
                             	</div>
                             	<div class="col-xs-4">
                             		<div class="checkbox"><label></label> <input type="checkbox" id="dataNameCheck" value="1" /> </div>
@@ -63,36 +89,46 @@
                             </div>
                             <div class="row">
                             	<div class="col-xs-4">
-                            		<input type="text" class="form-control" name="dataName2" th:value="${device.dataName2}" />
+                            		<input type="text" class="form-control" id="dataName" name="dataName2" th:value="${device.dataName2}" />
                             	</div>
                             	<div class="col-xs-4">
-                            		<div class="checkbox"><label></label> <input type="checkbox" id="dataNameCheck" value="1" /> </div>
+                            		<div class="checkbox"><label></label> <input type="checkbox" id="dataNameCheck" value="2" /> </div>
                             	</div>
                             </div>
                             <div class="row">
                             	<div class="col-xs-4">
-                            		<input type="text" class="form-control" name="dataName3" th:value="${device.dataName3}" />
+                            		<input type="text" class="form-control" id="dataName" name="dataName3" th:value="${device.dataName3}"/>
                             	</div>
                             	<div class="col-xs-4">
-                            		<div class="checkbox"><label></label> <input type="checkbox" id="dataNameCheck" value="1" /> </div>
+                            		<div class="checkbox"><label></label> <input type="checkbox" id="dataNameCheck" value="3" /> </div>
                             	</div>
                             </div>
                             <div class="row">
                             	<div class="col-xs-4">
-                            		<input type="text" class="form-control" name="dataName4" th:value="${device.dataName4}" />
+                            		<input type="text" class="form-control" id="dataName" name="dataName4" th:value="${device.dataName4}" />
                             	</div>
                             	<div class="col-xs-4">
-                            		<div class="checkbox"><label></label> <input type="checkbox" id="dataNameCheck" value="1" /> </div>
+                            		<div class="checkbox"><label></label> <input type="checkbox" id="dataNameCheck" value="4" /> </div>
                             	</div>
                             </div>
                             <div class="row">
                             	<div class="col-xs-4">
-                            		<input type="text" class="form-control" name="dataName5" th:value="${device.dataName5}" />
+                            		<input type="text" class="form-control" id="dataName" name="dataName5" th:value="${device.dataName5}" />
                             	</div>
                             	<div class="col-xs-4">
-                            		<div class="checkbox"><label></label> <input type="checkbox" id="dataNameCheck" value="1" /> </div>
+                            		<div class="checkbox"><label></label> <input type="checkbox" id="dataNameCheck" value="5" /> </div>
                             	</div>
                             </div>
+                        </div>
+                    </div>
+                    
+                    <div class="control-group form-group">
+                    <div class="controls">
+                    	<label>Public</label>
+                        	<div class="row">
+                            <div class="col-xs-4">
+                            <input type="checkbox" th:checked="${device.isPublic}"  name="isPublic" />
+                        	</div></div>
                         </div>
                     </div>
                     

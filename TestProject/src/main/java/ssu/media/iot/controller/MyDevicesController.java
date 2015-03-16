@@ -73,19 +73,39 @@ public class MyDevicesController {
 	public String viewMyDeviceDetail(Authentication authentication, Model model,
 									@PathVariable Long deviceId)
 	{
-		System.out.println("in");
+		//System.out.println("in");
 		Devices device = devicesRepository.findOne(deviceId);
 		
 		model.addAttribute("device", device);
+		
+	   // System.out.println(model.asMap().get("device"));
 		
 		Map<Integer, String> dataNameMap = deviceService.dataNameMap(device);
 		
 		if(dataNameMap != null){
 		
-		
 		model.addAttribute("dataNameMap", dataNameMap);}
 		
 		return "devices/viewMyDevice";
+	}
+	
+	@RequestMapping(value="/viewMyDevice/{deviceId}", method=RequestMethod.POST)
+	public String updateMyDeviceSetting(Authentication authentication, @PathVariable Long deviceId, Devices device)
+	{
+		//Devices oDevice = devicesRepository.findOne(deviceId);
+		
+		System.out.println(device);
+		
+		//oDevice = device;
+		
+		device.setId(deviceId);
+		
+		TestUser loginUser = getLoginUser(authentication.getName());
+		device.setOwnner(loginUser);
+		
+		devicesRepository.save(device);
+		
+		return "redirect:/devices/viewMyDevice/"+deviceId;
 	}
 	
 	/**

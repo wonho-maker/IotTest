@@ -212,12 +212,16 @@ public class Devices implements Serializable {
 	public void setDataName5(String dataName5) {
 		this.dataName5 = dataName5;
 	}
-
+	
 	public boolean isPublic() {
 		return isPublic;
 	}
-
-	public void setPublic(boolean isPublic) {
+	
+	public boolean getIsPublic() {
+		return isPublic;
+	}
+	
+	public void setIsPublic(boolean isPublic) {
 		this.isPublic = isPublic;
 	}
 

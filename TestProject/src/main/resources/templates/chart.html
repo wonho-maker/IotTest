@@ -130,8 +130,61 @@
 		
 		var options = {
 		        chart: {
-		            renderTo: 'container'
-		            
+		            renderTo: 'container',
+		            events: {
+		            	load: function() {
+		            		setInterval( function() {
+		            			$.getJSON(getCurrentId(), function(jsonData) {
+		            				var availableFields = getAvailableFields(jsonData);
+		            		    	
+		            		        var chartDataArray = allocateChartArray(availableFields.length);
+		            		        
+		            		      
+		            		        	var chartData = [];
+		            		        	$.each(jsonData.dataFields, function(k, field)
+		            				    {
+		            				        var point = new Highcharts.Point();
+		            				        			
+		            						point.x = getChartDate(field.updateTime);
+		            						point.y = parseFloat(field.dataValue);
+		            				        			
+		            						chartDataArray[field.fieldNumber - 1].push(point);
+		            								
+		            				    });
+		            		      //set series and series's name
+		            		        var series = [];
+		            		        
+		            		      	
+		            		        $.each(availableFields, function(i, value){
+		            		        	if(value != null) {
+		            		        		var seriesTemp = new Highcharts.Series();
+		            		        		seriesTemp.name = value;
+		            		        		series.push(seriesTemp);
+		            		        	}
+		            		        });
+		            		        
+		            		        options.series = series;
+		            				
+		            		        //set data to series
+		            		        var k = 0;
+		            		        
+		            		        $.each(availableFields, function(j, aFields){
+		            		        	if(aFields != null) {
+		            		        		options.series[k].data = chartDataArray[j];
+		            			        	options.series[k].name = aFields;
+		            			        	k++;
+		            		        	}
+		            		        	else {
+		            		        		
+		            		        	}
+		            		        	
+		            		        });		
+		            			});
+		            			
+		            			 var chart = new Highcharts.Chart(options);
+		            		}, 15000);	
+		            	}
+		            }
 		        },
 		        title: {
 		        	text: ' '
@@ -155,7 +208,7 @@
 		        }
 		    };
 			
-			
+				
 		$.getJSON(getCurrentId(), function(jsonData) {
 	    	
 	    	if(jsonData.id == null) {
@@ -213,6 +266,9 @@
 			
 	    	//apply chart
 	        var chart = new Highcharts.Chart(options);
+	    	
+		
+		
 	    });
 
 	});

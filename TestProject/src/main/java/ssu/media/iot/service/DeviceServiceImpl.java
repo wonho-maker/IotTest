@@ -1,5 +1,6 @@
 package ssu.media.iot.service;
 
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -31,29 +32,37 @@ public class DeviceServiceImpl implements DeviceService{
 		
 		APIKeys apiKeyD = apiKeyRepo.findByApiKey(apiKey);
 		
-		System.out.println(apiKeyD.getApiKey());
-		
 		Devices device = apiKeyD.getApiOwnner();
 		
 		//Devices device = deviceRepo.findByApiKey(apiKeyD);
 		
-		if(device != null)
-		System.out.println(device.getDeviceName());
 		
 		return device;
 	}
 	
 	@Override
-	public Devices findByDeviceId(Long deviceId, String apiKey) {
+	public Devices findByDeviceId(Long deviceId, String apiKey, Boolean allData) {
 		
 		Devices device = deviceRepo.findOne(deviceId);
-		
 		
 		String checkString = isPublicField(device, apiKey);
 		
 		if(checkString.equals("OK"))
 		{
-			return device;
+			if(allData) {
+				return device;
+			}
+			else {
+				Date start = new Date();
+				start.setTime(start.getTime() - 6 * 60 * 60 * 1000);
+				Date end = new Date();
+				List<SensorDataField> dataField =  sDataFieldRepo.findByDeviceIdOneDay(device, start, end);
+				
+				device.setDataFields(dataField);
+				
+				return device;
+			}
+			
 		}
 		else
 		{
@@ -63,8 +72,36 @@ public class DeviceServiceImpl implements DeviceService{
 	}
 	
 	@Override
+	public Devices findByDeviceIdAndLastFieldsData(Long deviceId, String apiKey) {
+		Devices device = deviceRepo.findOne(deviceId);
+		
+		String checkString = isPublicField(device, apiKey);
+		
+		if(checkString.equals("OK"))
+		{
+			
+			SensorDataField lastField = device.getDataFields().get(device.getDataFields().size() -1 );
+			
+			device.getDataFields().clear();
+			
+			device.getDataFields().add(lastField);
+			
+			List<SensorDataField> dataField = device.getDataFields();
+				
+			device.setDataFields(dataField);
+				
+			return device;
+			
+		}
+		else
+		{
+			return new Devices(checkString);
+		}
+	}
+	
+	@Override
 	public Devices getDeviceAndDataField(Long DeviceId,
-			Integer fieldNumber, String apiKey) {
+			Integer fieldNumber, String apiKey, Boolean allData) {
 		
 		Devices device = deviceRepo.findOne(DeviceId);
 		
@@ -72,19 +109,38 @@ public class DeviceServiceImpl implements DeviceService{
 		
 		if(checkString.equals("OK"))
 		{
-			List<SensorDataField> dataField =  sDataFieldRepo.findByDeviceIdAndFieldNumber(device, fieldNumber);
-			
-			device.setDataFields(dataField);
-			
-			setFieldNameForAPI(device, fieldNumber);
-			
-			return device;
+			if(allData) {
+				List<SensorDataField> dataField =  sDataFieldRepo.findByDeviceIdAndFieldNumber(device, fieldNumber);
+				
+				device.setDataFields(dataField);
+				
+				setFieldNameForAPI(device, fieldNumber);
+				
+				return device;
+			}
+			else
+			{
+				Date start = new Date();
+				start.setTime(start.getTime() - 6 * 60 * 60 * 1000);
+				
+				Date end = new Date();
+				
+				
+				List<SensorDataField> dataField =  sDataFieldRepo.findByDeviceIdAndFieldNumberOneDay(device, fieldNumber, start, end);
+				
+				device.setDataFields(dataField);
+				
+				setFieldNameForAPI(device, fieldNumber);
+				
+				return device;
+			}
 		}
 		else
 		{
 			return new Devices(checkString);
 		}
 	}
+	
 	
 	@Override
 	public String isPublicField(Devices device, String apiKey) {
