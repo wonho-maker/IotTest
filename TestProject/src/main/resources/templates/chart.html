@@ -19,7 +19,7 @@
 
 <script th:inline="javascript">
 /*<![CDATA[*/
-	function getCurrentId()
+	function getCurrentUrl()
     	{
 			var currentUrl = window.location.pathname;
     		
@@ -43,6 +43,39 @@
 </script>
 
 <script>
+function getUrlForLastData(currentUrl)
+{
+	var urlForLastData;
+	if(currentUrl.split("?")[1] != null) {
+		
+		var url = currentUrl.split('?')[0];
+		var param = currentUrl.split('?')[1];
+		
+		urlForLastData = url + "/last?";
+		/*<![CDATA[*/
+		if(param.search('&') != -1){
+			var params = param.split('&');
+			/*]]>*/
+			$.each(params, function(i, v) {
+				if(v.search("allData") == -1) {
+					urlForLastData += v;
+				}
+			});
+		}
+		else {
+			urlForLastData += param;
+		}
+		
+		
+	}
+	else {
+		urlForLastData = currentUrl + "/last";
+	}
+	
+	
+	return urlForLastData;
+}
+
     	function getChartDate(date)
 		{
     		var myOffset = new Date().getTimezoneOffset();
@@ -112,166 +145,162 @@
 
 <script>
  
-	$(document).ready(function() 
-	{
-		Highcharts.setOptions({
-			chart : {
-				backgroundColor : {
-					linearGradient : [ 0, 0, 500, 500 ],
-					stops : [ [ 0, 'rgb(255, 255, 255)' ],
-							[ 1, 'rgb(240, 240, 255)' ] ]
-				},
-				//borderWidth: 2,
-				plotBackgroundColor : 'rgba(255, 255, 255, .9)',
-				plotShadow : true,
-				plotBorderWidth : 1
-			}
-		});
-		
-		var options = {
-		        chart: {
-		            renderTo: 'container',
-		            events: {
-		            	load: function() {
-		            		setInterval( function() {
-		            			$.getJSON(getCurrentId(), function(jsonData) {
-		            				var availableFields = getAvailableFields(jsonData);
-		            		    	
-		            		        var chartDataArray = allocateChartArray(availableFields.length);
-		            		        
-		            		      
-		            		        	var chartData = [];
+$(document).ready(function() 
+		{
+			Highcharts.setOptions({
+				chart : {
+					backgroundColor : {
+						linearGradient : [ 0, 0, 500, 500 ],
+						stops : [ [ 0, 'rgb(255, 255, 255)' ],
+								[ 1, 'rgb(240, 240, 255)' ] ]
+					},
+					//borderWidth: 2,
+					plotBackgroundColor : 'rgba(255, 255, 255, .9)',
+					plotShadow : true,
+					plotBorderWidth : 1
+				}
+			});
+			
+			$.getJSON(getCurrentUrl(), function(jsonData) {
+			
+				if(jsonData.id == null) {
+		    		$('#subtitle').append(jsonData.deviceName);
+		    		return;
+		    	}
+		        
+		    	var availableFields = getAvailableFields(jsonData);
+		    	
+		        var chartDataArray = allocateChartArray(availableFields.length);
+		        
+		      
+		        	var chartData = [];
+		        	$.each(jsonData.dataFields, function(k, field)
+				    {
+				        var point = new Highcharts.Point();
+				        			
+						point.x = getChartDate(field.updateTime);
+						point.y = parseFloat(field.dataValue);
+				        			
+						chartDataArray[field.fieldNumber - 1].push(point);
+								
+				    });
+		        	
+			var options = {
+			        chart: {
+			            renderTo: 'container',
+			            events: {
+			            	load: function() {
+			            		setInterval( function() {
+			            			var urlForLastData = getUrlForLastData(getCurrentUrl());
+			            			var isOnlyOneField = false;
+			            			//only one field
+			            			var temp = urlForLastData.split("/last")[0];
+		            			
+		            				if(temp.split("fields")[1].search("/") != -1) {
+		            					isOnlyOneField = true;
+		            				}
+		            			
+			            			
+			            			$.getJSON(urlForLastData, function(jsonData) {
+			            		    	
 		            		        	$.each(jsonData.dataFields, function(k, field)
 		            				    {
 		            				        var point = new Highcharts.Point();
 		            				        			
 		            						point.x = getChartDate(field.updateTime);
 		            						point.y = parseFloat(field.dataValue);
-		            				        			
-		            						chartDataArray[field.fieldNumber - 1].push(point);
-		            								
+		            						
+		            						var seriesIndex;
+		            						
+		            						if(isOnlyOneField) {
+		            							seriesIndex = 0;
+		            						}
+		            						else {
+		            							seriesIndex = field.fieldNumber -1;
+		            						}
+		            						
+		            						var lastIndex = options.series[seriesIndex].data.length -1;
+		            						if(lastIndex == -1) {
+												dataChart.series[seriesIndex].addPoint(point, true, false);	
+											}
+											else {
+		            							if(dataChart.series[seriesIndex].data[lastIndex].x == point.x) {
+		            								dataChart.series[seriesIndex].data[lastIndex].update(point);
+		            							}
+		            							else {
+		            								dataChart.series[seriesIndex].addPoint(point, true, false);
+		            							}
+											}
 		            				    });
-		            		      //set series and series's name
-		            		        var series = [];
-		            		        
-		            		      	
-		            		        $.each(availableFields, function(i, value){
-		            		        	if(value != null) {
-		            		        		var seriesTemp = new Highcharts.Series();
-		            		        		seriesTemp.name = value;
-		            		        		series.push(seriesTemp);
-		            		        	}
-		            		        });
-		            		        
-		            		        options.series = series;
-		            				
-		            		        //set data to series
-		            		        var k = 0;
-		            		        
-		            		        $.each(availableFields, function(j, aFields){
-		            		        	if(aFields != null) {
-		            		        		options.series[k].data = chartDataArray[j];
-		            			        	options.series[k].name = aFields;
-		            			        	k++;
-		            		        	}
-		            		        	else {
-		            		        		
-		            		        	}
 		            		        	
-		            		        });		
 		            			});
-		            			
-		            			 var chart = new Highcharts.Chart(options);
-		            		}, 15000);	
-		            	}
-		            }
-		        },
-		        title: {
-		        	text: ' '
-		        },
-		        subtitle:{
-		        	text: ' '
-		        },
-		        xAxis: {
-		        	type: 'datetime'
-		        },
-		        series: [{
-		        	//pointInterval : 3600 * 1000
-		        	
-		        }],
-		        credits : {
-					text : 'Iot Test',
-					//href: 'http://'
-					style : {
-						color : '#D62020'
-					}
-		        }
-		    };
-			
+			            			
+			            		}, 20000);	
+			            	}
+			            }
+			        },
+			        title: {
+			        	text: ' '
+			        },
+			        subtitle:{
+			        	text: ' '
+			        },
+			        xAxis: {
+			        	type: 'datetime'
+			        },
+			        series: [{
+			        	//pointInterval : 3600 * 1000
+			        	
+			        }],
+			        credits : {
+						text : 'Iot Test',
+						//href: 'http://'
+						style : {
+							color : '#D62020'
+						}
+			        }
+			    };
+		    	
+		      //set series and series's name
+		        var series = [];
+		        
+		      	
+		        $.each(availableFields, function(i, value){
+		        	if(value != null) {
+		        		var seriesTemp = new Highcharts.Series();
+		        		seriesTemp.name = value;
+		        		series.push(seriesTemp);
+		        	}
+		        });
+		        
+		        options.series = series;
 				
-		$.getJSON(getCurrentId(), function(jsonData) {
-	    	
-	    	if(jsonData.id == null) {
-	    		$('#subtitle').append(jsonData.deviceName);
-	    		return;
-	    	}
-	        
-	    	var availableFields = getAvailableFields(jsonData);
-	    	
-	        var chartDataArray = allocateChartArray(availableFields.length);
-	        
-	      
-	        	var chartData = [];
-	        	$.each(jsonData.dataFields, function(k, field)
-			    {
-			        var point = new Highcharts.Point();
-			        			
-					point.x = getChartDate(field.updateTime);
-					point.y = parseFloat(field.dataValue);
-			        			
-					chartDataArray[field.fieldNumber - 1].push(point);
-							
-			    });
-	      //set series and series's name
-	        var series = [];
-	        
-	      	
-	        $.each(availableFields, function(i, value){
-	        	if(value != null) {
-	        		var seriesTemp = new Highcharts.Series();
-	        		seriesTemp.name = value;
-	        		series.push(seriesTemp);
-	        	}
-	        });
-	        
-	        options.series = series;
+		        //set data to series
+		        var k = 0;
+		        
+		        $.each(availableFields, function(j, aFields){
+		        	if(aFields != null) {
+		        		options.series[k].data = chartDataArray[j];
+			        	options.series[k].name = aFields;
+			        	k++;
+		        	}
+		        	else {
+		        		
+		        	}
+		        	
+		        });
+		        
+		        //set chart title
+		    	options.title.text = jsonData.deviceName;;
+				
+		    	//apply chart
+		        var dataChart = new Highcharts.Chart(options);
+		    	
 			
-	        //set data to series
-	        var k = 0;
-	        
-	        $.each(availableFields, function(j, aFields){
-	        	if(aFields != null) {
-	        		options.series[k].data = chartDataArray[j];
-		        	options.series[k].name = aFields;
-		        	k++;
-	        	}
-	        	else {
-	        		
-	        	}
-	        	
-	        });
-	        
-	        //set chart title
-	    	options.title.text = jsonData.deviceName;;
 			
-	    	//apply chart
-	        var chart = new Highcharts.Chart(options);
-	    	
-		
-		
-	    });
+		    });
 
-	});
+		});
 				
 </script>
 

@@ -38,30 +38,49 @@ public class APIController {
 		}
 	}
 	
-	@RequestMapping(value = "/devices/{deviceId}/fields/last", method = RequestMethod.GET)
-	public Devices getDeviceLastFieldsData(@PathVariable Long deviceId,
-									@RequestParam(value="key", required=false) String apiKey)
-									
-	{
-		return deviceService.findByDeviceIdAndLastFieldsData(deviceId, apiKey);
-	}
-	
-	@RequestMapping(value = "/devices/{deviceId}/fields/{fieldId}", method = RequestMethod.GET)
-	public Devices getFieldData(@PathVariable Long deviceId, @PathVariable Integer fieldId,
+	@RequestMapping(value = "/devices/{deviceId}/fields/{fieldIdOrOption}", method = RequestMethod.GET)
+	public Devices getFieldData(@PathVariable Long deviceId, @PathVariable String fieldIdOrOption,
 								@RequestParam(value="key", required=false) String apiKey,
 								@RequestParam(value="allData", required=false) Boolean allData)
 	{
 		Devices device;
 		
-		if(allData != null) {
-			device = deviceService.getDeviceAndDataField(deviceId, fieldId, apiKey, allData);
+		try {
+			int fieldNumber = Integer.parseInt(fieldIdOrOption);
+		
+			if(allData != null) {
+				device = deviceService.getDeviceAndDataOneField(deviceId, fieldNumber, apiKey, allData);
+			}
+			else
+			{
+				device = deviceService.getDeviceAndDataOneField(deviceId, fieldNumber, apiKey, false);
+			}
+			
+			return device;
 		}
-		else
-		{
-			device = deviceService.getDeviceAndDataField(deviceId, fieldId, apiKey, false);
+		catch(Exception e) {
+			if(fieldIdOrOption.equals("last")) {
+				return deviceService.findByDeviceIdAndLastFieldsData(deviceId, apiKey);
+			}
+			
+			return null;
+		}
+	
+	}
+	
+	@RequestMapping(value = "/devices/{deviceId}/fields/{fieldId}/{option}", method = RequestMethod.GET)
+	public Devices getFieldDataAndOption(@PathVariable Long deviceId, @PathVariable Integer fieldId,
+								@PathVariable String option,
+								@RequestParam(value="key", required=false) String apiKey,
+								@RequestParam(value="allData", required=false) Boolean allData)
+	{
+		
+		
+		if(option.equals("last")) {
+			return deviceService.getDeviceAndLastDataOneField(deviceId, fieldId, apiKey);
 		}
 			
-		return device;
+		return null;
 	
 	}
 	

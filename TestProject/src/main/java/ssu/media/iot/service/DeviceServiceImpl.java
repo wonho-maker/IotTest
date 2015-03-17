@@ -1,5 +1,6 @@
 package ssu.media.iot.service;
 
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
@@ -79,12 +80,33 @@ public class DeviceServiceImpl implements DeviceService{
 		
 		if(checkString.equals("OK"))
 		{
+			int lastIndex = device.getDataFields().size() -1;
 			
-			SensorDataField lastField = device.getDataFields().get(device.getDataFields().size() -1 );
+			List<SensorDataField> lastFields = new ArrayList<SensorDataField>();
 			
-			device.getDataFields().clear();
+			Map<Integer, String> dataName = dataNameMap(device);
 			
-			device.getDataFields().add(lastField);
+			System.out.println(dataName.isEmpty());
+			
+			while(!dataName.isEmpty()) {
+				
+				if(lastIndex < 0)
+					break;
+				
+				SensorDataField lastField = device.getDataFields().get(lastIndex);
+				
+				Integer fieldNumberKey = lastField.getFieldNumber();
+				//System.out.println(dataName);
+				if(dataName.containsKey(fieldNumberKey)) {
+					//System.out.println(lastField);
+					lastFields.add(lastField);
+					dataName.remove(lastField.getFieldNumber());
+				}
+				
+				lastIndex--;
+			}
+			
+			device.setDataFields(lastFields);
 			
 			List<SensorDataField> dataField = device.getDataFields();
 				
@@ -100,10 +122,10 @@ public class DeviceServiceImpl implements DeviceService{
 	}
 	
 	@Override
-	public Devices getDeviceAndDataField(Long DeviceId,
+	public Devices getDeviceAndDataOneField(Long deviceId,
 			Integer fieldNumber, String apiKey, Boolean allData) {
 		
-		Devices device = deviceRepo.findOne(DeviceId);
+		Devices device = deviceRepo.findOne(deviceId);
 		
 		String checkString = isPublicField(device, apiKey);
 		
@@ -141,6 +163,53 @@ public class DeviceServiceImpl implements DeviceService{
 		}
 	}
 	
+	@Override
+	public Devices getDeviceAndLastDataOneField(Long deviceId, Integer fieldNumber, String apiKey)
+	{
+		Devices device = deviceRepo.findOne(deviceId);
+		
+		
+		String checkString = isPublicField(device, apiKey);
+		
+		if(checkString.equals("OK"))
+		{
+			int lastIndex = device.getDataFields().size() -1;
+			
+			SensorDataField lastField = null;
+			
+			while(lastIndex > 0){
+			
+			    lastField = device.getDataFields().get(lastIndex);
+				
+				if(lastField.getFieldNumber() == fieldNumber) {
+					break;
+				}
+				else
+				{
+					lastIndex--;
+				}
+			
+			}
+			
+			if(lastIndex < 0){
+				lastField = new SensorDataField();
+			}
+			
+			device.getDataFields().clear();
+			
+			device.getDataFields().add(lastField);
+			
+			List<SensorDataField> dataField = device.getDataFields();
+				
+			device.setDataFields(dataField);
+			
+			return device;
+		}
+		else
+		{
+			return new Devices(checkString);
+		}
+	}
 	
 	@Override
 	public String isPublicField(Devices device, String apiKey) {

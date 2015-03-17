@@ -14,7 +14,9 @@ public interface DeviceService {
 	
 	Devices findByDeviceIdAndLastFieldsData(Long deviceId, String apiKey);
 	
-	Devices getDeviceAndDataField(Long DeviceId, Integer fieldNumber, String apiKey, Boolean allData);
+	Devices getDeviceAndDataOneField(Long deviceId, Integer fieldNumber, String apiKey, Boolean allData);
+	
+	Devices getDeviceAndLastDataOneField(Long deviceId, Integer fieldNumber, String apiKey);
 	
 	String isPublicField(Devices device, String apiKey);
 	
